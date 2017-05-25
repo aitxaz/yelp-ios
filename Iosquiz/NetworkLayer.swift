@@ -7,8 +7,10 @@
 //
 
 
-protocol NetworkDelegate {
-    func updatePins(arr:NSMutableArray)
+@objc protocol NetworkDelegate {
+    @objc optional func getResponse(arr:NSMutableArray)
+    @objc optional func getReviewsResponse(arr:NSMutableArray)
+
 }
 
 import UIKit
@@ -24,9 +26,6 @@ class NetworkLayer: NSObject {
     func getBusinesses(lat:Float,long:Float) {
         
         let businessArr:NSMutableArray = []
-        
-//        Alamofire.request("https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=\(lat)&longitude=\(long)").responseJSON
-        
         let headers: HTTPHeaders = [
             "Authorization": "Bearer f-Oezj8VaCmOWl1DI2EjqjSvtYLQl0WkyULF38necT09bfhehzjjsSEqMUNgs2TLIC7a1zT4ExXohDK5EmVu3mVBXzbpzyA5ccdNNrycf48LR6tN4ZeWljXHSpUeWXYx",
             "Accept": "application/json"
@@ -44,35 +43,40 @@ class NetworkLayer: NSObject {
                                 for index in 0...business.count - 1 {
                                     let dataObj = business[index]
                                     let bus = Business()
-                                    bus.display_phone = (dataObj as! Dictionary<String,AnyObject>)["display_phone"] as! String
-                                    bus.image_url = (dataObj as! Dictionary<String,AnyObject>)["image_url"] as! String
-                                    bus.name = (dataObj as! Dictionary<String,AnyObject>)["name"] as! String
-                                    bus.rating = ((dataObj as! Dictionary<String,AnyObject>)["rating"]?.doubleValue)!
-                                    bus.review_count = ((dataObj as! Dictionary<String,AnyObject>)["review_count"]?.stringValue)!
-                                    bus.categories = (dataObj as! Dictionary<String,AnyObject>)["categories"] as! Array
-                                    
-                                    bus.lat = (dataObj as! Dictionary<String,AnyObject>)["coordinates"]?["latitude"] as! Double
-                                    bus.long = (dataObj as! Dictionary<String,AnyObject>)["coordinates"]?["longitude"] as! Double
-                                    
-                                    bus.display_address = (dataObj as! Dictionary<String,AnyObject>)["location"]?["address1"] as! String
-                                    
-                                    businessArr.add(bus)
-                                    
+                                    businessArr.add(bus.pupulateBusniesData(busData: dataObj as AnyObject))
                                 }
-                                //                        print(businessArr)
-                                
                             }
-                            self.delegate?.updatePins(arr:businessArr)
+                            self.delegate?.getResponse!(arr:businessArr)
                             
                         }
-                
                     }
-//                for business in JSON {
-//                    print(business)
-//                }
-//
-//            }
         }
 
+    }
+    
+    func getReviews(id:String){
+        let arrReviews:NSMutableArray = []
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer f-Oezj8VaCmOWl1DI2EjqjSvtYLQl0WkyULF38necT09bfhehzjjsSEqMUNgs2TLIC7a1zT4ExXohDK5EmVu3mVBXzbpzyA5ccdNNrycf48LR6tN4ZeWljXHSpUeWXYx",
+            "Accept": "application/json"
+        ]
+
+        Alamofire.request("https://api.yelp.com/v3/businesses/\(id)/reviews", headers: headers).responseJSON { response in
+            if case let JSON as Dictionary<String, Any> = response.result.value {
+                print("JSON: \(JSON["reviews"])")
+                
+                
+                if case let reviews as Array<Any> = JSON["reviews"] {
+                    if (reviews.count > 0) {
+                        for index in 0...reviews.count - 1 {
+                            let reviewObj = reviews[index]
+                            let review = Review()
+                            arrReviews.add(review.populateReviewData(reviewData: reviewObj as AnyObject))
+                        }
+                    }
+                    self.delegate?.getReviewsResponse!(arr:arrReviews)
+                }
+            }
+        }
     }
 }

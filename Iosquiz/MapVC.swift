@@ -15,11 +15,17 @@ class MapVC: UIViewController,NetworkDelegate,GMSMapViewDelegate,CLLocationManag
     
     var businessArr:NSMutableArray = []
     var locationManager = CLLocationManager()
+    var didchangePos:Bool = false
     
     @IBOutlet var popUpView: UIView!
     @IBOutlet var viewMap: UIView!
     var lat:Double = 0.0
     var long:Double = 0.0
+    
+    var camera:GMSCameraPosition? = nil
+    var mapView:GMSMapView? = nil
+    
+    
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -28,15 +34,19 @@ class MapVC: UIViewController,NetworkDelegate,GMSMapViewDelegate,CLLocationManag
 //        long = -122.399972
         NetworkLayer.sharedInstance.delegate = self
         self.initializeTheLocationManager()
+        
         lat = (locationManager.location?.coordinate.latitude)!
         long = (locationManager.location?.coordinate.longitude)!
         
-        
-        print(lat)
+        camera = GMSCameraPosition.camera(withLatitude: lat, longitude: long, zoom: 15.0)
+        mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera!)
+        mapView?.delegate = self
+        view = mapView
+    
         NetworkLayer.sharedInstance.getBusinesses(lat: Float(lat), long: Float(long))
-        
-        
-        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        NetworkLayer.sharedInstance.delegate = self
     }
     func initializeTheLocationManager()
     {
@@ -50,49 +60,21 @@ class MapVC: UIViewController,NetworkDelegate,GMSMapViewDelegate,CLLocationManag
             print("Location services are not enabled");
         }
     }
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        locationManager.stopUpdatingLocation()
-//        if ((error) != nil) {
-            print(error)
-//        }
+    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+        if didchangePos {
+            let latitude:Double = mapView.camera.target.latitude
+            let longitude:Double = mapView.camera.target.longitude
+            lat = latitude
+            long = longitude
+            NetworkLayer.sharedInstance.getBusinesses(lat:Float(latitude),long: Float(longitude))
+            didchangePos = false
+        }
     }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-//        let locationArray = locations as NSArray
-//        let locationObj = locationArray.lastObject as! CLLocation
-//        let coord = locationObj.coordinate
-//        print(coord)
-        
-        lat = (manager.location?.coordinate.latitude)!
-        long = (manager.location?.coordinate.longitude)!
-        NetworkLayer.sharedInstance.getBusinesses(lat: Float(lat), long: Float(long))
-
-//        longitude.text = coord.longitude
-//        latitude.text = coord.latitude
-//        longitude.text = "\(coord.longitude)"
-//        latitude.text = "\(coord.latitude)"
-    }
-    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-//        manager.location?.coordinate.latitude
-        lat = (manager.location?.coordinate.latitude)!
-        long = (manager.location?.coordinate.longitude)!
-        NetworkLayer.sharedInstance.getBusinesses(lat: Float(lat), long: Float(long))
-
+    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        didchangePos = true
     }
     func loadmap(arr:NSMutableArray) {
                 businessArr = arr
-                let camera = GMSCameraPosition.camera(withLatitude: lat, longitude: long, zoom: 15.0)
-                let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-       
-     ///   if let mylocation = mapView.myLocation {
-   //         print("User's location: \(mylocation)")
-//} else {
-    //        print("User's location is unknown")
-   //     }
-
-        mapView.delegate = self
-                view = mapView
-        
         if arr.count > 0 {
             for index in 0...arr.count-1 {
                 
@@ -103,10 +85,8 @@ class MapVC: UIViewController,NetworkDelegate,GMSMapViewDelegate,CLLocationManag
                 marker.userData = index
                 marker.snippet = "\(business.display_address) \n Ratings: \(business.rating)"
                 marker.map = mapView
-                
             }
         }
-        
     }
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         let detail = self.storyboard?.instantiateViewController(withIdentifier: "DetailVC") as! BusinessDetailVC
@@ -118,7 +98,7 @@ class MapVC: UIViewController,NetworkDelegate,GMSMapViewDelegate,CLLocationManag
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    func updatePins(arr:NSMutableArray) {
+    func getResponse(arr:NSMutableArray) {
         self.loadmap(arr: arr)
     }
 }

@@ -19,6 +19,9 @@
 		023B49041ECF423E0019BBD7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 023B49031ECF423E0019BBD7 /* AVFoundation.framework */; };
 		027896651ECF2692001FDC60 /* AddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027896641ECF2692001FDC60 /* AddressCell.swift */; };
 		027896671ECF2C97001FDC60 /* categoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027896661ECF2C97001FDC60 /* categoryCell.swift */; };
+		02A47AFD1ED6DC280087E2EE /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A47AFC1ED6DC280087E2EE /* Review.swift */; };
+		02A47B001ED6E7E70087E2EE /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A47AFF1ED6E7E70087E2EE /* ReviewCell.swift */; };
+		02A47B021ED6E84C0087E2EE /* ReviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A47B011ED6E84C0087E2EE /* ReviewVC.swift */; };
 		07904CEA0A1A2ABA7019898D /* Pods_Iosquiz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C465DC0599BC5F93B875267 /* Pods_Iosquiz.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +41,9 @@
 		023B49031ECF423E0019BBD7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		027896641ECF2692001FDC60 /* AddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddressCell.swift; path = Cells/AddressCell.swift; sourceTree = "<group>"; };
 		027896661ECF2C97001FDC60 /* categoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = categoryCell.swift; path = Cells/categoryCell.swift; sourceTree = "<group>"; };
+		02A47AFC1ED6DC280087E2EE /* Review.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Review.swift; path = Models/Review.swift; sourceTree = "<group>"; };
+		02A47AFF1ED6E7E70087E2EE /* ReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReviewCell.swift; path = Cells/ReviewCell.swift; sourceTree = "<group>"; };
+		02A47B011ED6E84C0087E2EE /* ReviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReviewVC.swift; path = controller/ReviewVC.swift; sourceTree = "<group>"; };
 		3C465DC0599BC5F93B875267 /* Pods_Iosquiz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Iosquiz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B75AE040C35897E3A5B2689C /* Pods-Iosquiz.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iosquiz.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Iosquiz/Pods-Iosquiz.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -60,7 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				02303E7A1ECEB72700D35B54 /* Iosquiz */,
-				02303E941ECEDEA300D35B54 /* Models */,
 				02303E791ECEB72700D35B54 /* Products */,
 				232E34AB09A4662599D358F5 /* Pods */,
 				2935068B80EE3586486027D5 /* Frameworks */,
@@ -79,15 +84,13 @@
 			isa = PBXGroup;
 			children = (
 				02303E7B1ECEB72700D35B54 /* AppDelegate.swift */,
-				02303E901ECED83F00D35B54 /* MapVC.swift */,
 				02303E921ECED9C600D35B54 /* NetworkLayer.swift */,
-				02303E8D1ECED72300D35B54 /* Main.storyboard */,
 				02303E821ECEB72700D35B54 /* Assets.xcassets */,
-				02303E841ECEB72700D35B54 /* LaunchScreen.storyboard */,
 				02303E871ECEB72700D35B54 /* Info.plist */,
-				02303E971ECF106800D35B54 /* BusinessDetailVC.swift */,
-				027896641ECF2692001FDC60 /* AddressCell.swift */,
-				027896661ECF2C97001FDC60 /* categoryCell.swift */,
+				02A47B041ED6E8920087E2EE /* storyBoards */,
+				02303E941ECEDEA300D35B54 /* Models */,
+				02A47AFE1ED6E7710087E2EE /* cells */,
+				02A47B031ED6E8520087E2EE /* controllers */,
 			);
 			path = Iosquiz;
 			sourceTree = "<group>";
@@ -96,9 +99,38 @@
 			isa = PBXGroup;
 			children = (
 				02303E951ECEDEEB00D35B54 /* Business.swift */,
+				02A47AFC1ED6DC280087E2EE /* Review.swift */,
 			);
 			name = Models;
-			path = Iosquiz;
+			sourceTree = "<group>";
+		};
+		02A47AFE1ED6E7710087E2EE /* cells */ = {
+			isa = PBXGroup;
+			children = (
+				027896641ECF2692001FDC60 /* AddressCell.swift */,
+				027896661ECF2C97001FDC60 /* categoryCell.swift */,
+				02A47AFF1ED6E7E70087E2EE /* ReviewCell.swift */,
+			);
+			name = cells;
+			sourceTree = "<group>";
+		};
+		02A47B031ED6E8520087E2EE /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				02303E971ECF106800D35B54 /* BusinessDetailVC.swift */,
+				02303E901ECED83F00D35B54 /* MapVC.swift */,
+				02A47B011ED6E84C0087E2EE /* ReviewVC.swift */,
+			);
+			name = controllers;
+			sourceTree = "<group>";
+		};
+		02A47B041ED6E8920087E2EE /* storyBoards */ = {
+			isa = PBXGroup;
+			children = (
+				02303E8D1ECED72300D35B54 /* Main.storyboard */,
+				02303E841ECEB72700D35B54 /* LaunchScreen.storyboard */,
+			);
+			name = storyBoards;
 			sourceTree = "<group>";
 		};
 		232E34AB09A4662599D358F5 /* Pods */ = {
@@ -245,9 +277,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				02303E931ECED9C600D35B54 /* NetworkLayer.swift in Sources */,
+				02A47AFD1ED6DC280087E2EE /* Review.swift in Sources */,
 				02303E981ECF106800D35B54 /* BusinessDetailVC.swift in Sources */,
 				02303E961ECEDEEB00D35B54 /* Business.swift in Sources */,
+				02A47B001ED6E7E70087E2EE /* ReviewCell.swift in Sources */,
 				02303E911ECED83F00D35B54 /* MapVC.swift in Sources */,
+				02A47B021ED6E84C0087E2EE /* ReviewVC.swift in Sources */,
 				027896651ECF2692001FDC60 /* AddressCell.swift in Sources */,
 				027896671ECF2C97001FDC60 /* categoryCell.swift in Sources */,
 				02303E7C1ECEB72700D35B54 /* AppDelegate.swift in Sources */,

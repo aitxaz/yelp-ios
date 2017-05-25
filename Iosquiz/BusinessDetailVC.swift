@@ -14,25 +14,22 @@ class BusinessDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     var business:Business? = nil
     @IBOutlet var headerView: UIView!
     @IBOutlet var tblview: UITableView!
-
     //   header view Outlets
     @IBOutlet var imgProfile: UIImageView!
     @IBOutlet var btnCategories: UIButton!
     @IBOutlet var btnInfo: UIButton!
     @IBOutlet var btnRatings: UIButton!
     @IBOutlet var hotelName: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tblview.tableHeaderView = headerView
         self.title = "Resturant Detail"        
-//        hotelName.text = business?.name
         let url = URL(string: (business?.image_url)!)
         imgProfile.kf.setImage(with: url)
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (business?.categories.count)! + 2
@@ -53,18 +50,10 @@ class BusinessDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! categoryCell
                 let dataObj = business?.categories[indexPath.row - 2]
                 cell.lblName.text = (dataObj! as Dictionary<String,String>)["title"]
-                
-
-            
-            
-
             return cell
         }
-
         return cellG!
     }
-    
-    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row==0 {
@@ -75,5 +64,11 @@ class BusinessDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             return 30
         }
         return 120
+    }
+    @IBAction func reviewsAction(_ sender: Any) {
+        let reviewVC = self.navigationController?.storyboard?.instantiateViewController(withIdentifier: "reviewVC") as! ReviewVC
+        reviewVC.dynamicID = (business?.id)!
+        self.navigationController?.pushViewController(reviewVC, animated: true)
+
     }
 }
